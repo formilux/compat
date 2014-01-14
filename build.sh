@@ -29,9 +29,9 @@ function onExit() {
     exit $?
 }
 
-ALL_NEED=(
-    bash-4 depmod flx make-3.81 make-3.82 make mksquashfs-2
-	mksquashfs-3 mksquashfs-4 sudo
+ALL_NEED=( 
+    depmod depmod flx mksquashfs-2 mksquashfs-3 mksquashfs-4 sudo
+    bash-4 make-3.81 make-3.82
 )
 # NEED=( */build.sh )
 # NEED=( */ )
@@ -94,6 +94,7 @@ for PKG in ${NEED[@]} ; do
     [[ -z "${HAVE_##* $PKG *}" ]] && continue
     [[ -x scripts/build-$PKG ]] ||
         die "don't known how to build $PKG: can't read scripts/build-$PKG"
+    echo "## building $PKG ..." >&2
     BUILDDIR=$CDIR/build/$PKG
     mkdir -p $BUILDDIR
     cd $BUILDDIR

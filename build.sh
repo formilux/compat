@@ -42,8 +42,8 @@ function do_prepare() {
     tar zxf ../$SRC_FILENAME --strip-components 1
 
     for patch in ${PATCHES[@]} ; do
-        echo "## patching with $PDIR/$patch" >&2
-        patch -p${PATCH_LEVEL:-1} < $PDIR/$patch
+        echo "## patching with $PDIR/$PKG/$patch" >&2
+        patch -p${PATCH_LEVEL:-1} < $PDIR/$PKG/$patch
     done
 }
 

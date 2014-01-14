@@ -1,8 +1,8 @@
 #!/bin/bash
 
-DEPMOD_VERSION="3.15"
-SRC_FILENAME="module-init-tools-$DEPMOD_VERSION.tgz"
-SRC_FETCH_PATH="https://www.kernel.org/pub/linux/utils/kernel/module-init-tools/module-init-tools-$DEPMOD_VERSION.tar.gz"
+SRC_VERSION="3.15"
+SRC_FILENAME="module-init-tools-$SRC_VERSION.tgz"
+SRC_FETCH_PATH="https://www.kernel.org/pub/linux/utils/kernel/module-init-tools/module-init-tools-$SRC_VERSION.tar.gz"
 SRC_FETCH_METHOD="http"
 
 set -e
@@ -14,6 +14,7 @@ fi
 tar zxf ../$SRC_FILENAME --strip-components 1 -C $BUILDDIR
 ./configure --enable-zlib-dynamic
 make depmod
+strip build/depmod
 
 if [[ -d $DESTDIR ]] ; then
   cp build/depmod $DESTDIR/$PKG

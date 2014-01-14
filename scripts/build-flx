@@ -1,6 +1,5 @@
 #!/bin/bash
 
-TEMPDIR=$BUILDDIR
 SRC_FILENAME="flxutils.tgz"
 SRC_FETCH_PATH="http://git.formilux.org/?p=dist/src/flxutils.git;a=snapshot;h=41dbee8f5da100d652899ad403c0e2ac43b16f04;sf=tgz"
 SRC_FETCH_METHOD="http"
@@ -12,7 +11,7 @@ if [[ ! -e ../$SRC_FILENAME ]] ; then
     fi
 fi
 tar zxf ../$SRC_FILENAME --strip-components 1 -C $BUILDDIR
-( cd flx ; make )
+( cd flx ; make ; strip flx )
 
 if [[ -d $DESTDIR ]] ; then
   cp flx/flx $DESTDIR/

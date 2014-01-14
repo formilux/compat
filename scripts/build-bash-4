@@ -1,9 +1,10 @@
 #!/bin/bash
 
-[[ -n $SRC_VERSION ]] || die "need to be source by parent script"
-SRC_FILENAME="squashfs-$SRC_VERSION.tgz"
-SRC_FETCH_PATH="http://sourceforge.net/projects/squashfs/files/squashfs/squashfs$SRC_VERSION/squashfs$SRC_VERSION.tar.gz/download"
+SRC_VERSION="4.2"
+SRC_FILENAME="bash-$SRC_VERSION.tgz"
+SRC_FETCH_PATH="http://ftp.gnu.org/gnu/bash/bash-$SRC_VERSION.tar.gz"
 SRC_FETCH_METHOD="http"
+PATCHES=( bash42-{001..045} )
 
 set -e
 if [[ ! -e ../$SRC_FILENAME ]] ; then
@@ -12,10 +13,18 @@ if [[ ! -e ../$SRC_FILENAME ]] ; then
     fi
 fi
 tar zxf ../$SRC_FILENAME --strip-components 1 -C $BUILDDIR
-( cd squashfs-tools ; make ; strip mksquashfs )
+for patch in ${PATCHES[@]} ; do
+  patch -p0 < $PDIR/$patch
+done
+
+./configure --prefix="/usr" --sysconfdir="/etc"
+make
+strip bash
 
 if [[ -d $DESTDIR ]] ; then
-  cp squashfs-tools/mksquashfs $DESTDIR/$PKG
+  cp bash $DESTDIR/$PKG
 else
   echo "re-run with --install to install binaries" >&2
 fi
+
+

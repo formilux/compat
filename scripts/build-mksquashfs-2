@@ -1,5 +1,4 @@
 #!/bin/bash
 
-SQUASHFS_VERSION=2.2-r2
-source ${BASH_SOURCE[0]%/*}/build-squashfs
-
+SRC_VERSION=2.2-r2
+source ${BASH_SOURCE[0]%-*}

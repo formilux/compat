@@ -1,8 +1,8 @@
 #!/bin/bash
 
-SUDO_VERSION="1.7.10p7"
-SRC_FILENAME="sudo-$SUDO_VERSION.tgz"
-SRC_FETCH_PATH="http://www.sudo.ws/sudo/dist/sudo-$SUDO_VERSION.tar.gz"
+SRC_VERSION="1.7.10p7"
+SRC_FILENAME="sudo-$SRC_VERSION.tgz"
+SRC_FETCH_PATH="http://www.sudo.ws/sudo/dist/sudo-$SRC_VERSION.tar.gz"
 SRC_FETCH_METHOD="http"
 
 set -e
@@ -11,10 +11,11 @@ if [[ ! -e ../$SRC_FILENAME ]] ; then
         die "can't read or download $SRC_FILENAME"
     fi
 fi
-mkdir -p $BUILDDIR
-tar zxf ../$SRC_FILENAME --strip-components 1 -C $BUILDDIR
-./configure --prefix="$TC_DST/tools" --sysconfdir="$TC_DST/tools/etc" --with-env-editor
+
+tar zxf ../$SRC_FILENAME --strip-components 1
+./configure --prefix="/usr" --sysconfdir="/etc" --with-env-editor
 make
+strip sudo
 
 if [[ -d $DESTDIR ]] ; then
   cp sudo $DESTDIR/$PKG

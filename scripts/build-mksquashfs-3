@@ -1,5 +1,4 @@
 #!/bin/bash
 
-SQUASHFS_VERSION=3.4
-source ${BASH_SOURCE[0]%/*}/build-squashfs
-
+SRC_VERSION=3.4
+source ${BASH_SOURCE[0]%-*}

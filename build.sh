@@ -39,6 +39,7 @@ ALL_NEED=(
 
 CDIR=$(readlink -f ${BASH_SOURCE[0]})
 CDIR=${CDIR%/*}
+PDIR="$CDIR/patches"
 
 set -e
 trap onExit EXIT

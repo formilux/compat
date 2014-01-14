@@ -37,6 +37,8 @@ ALL_NEED=(
 # NEED=( */ )
 # NEED=( ${SUBS[@]%/*} )
 
+CDIR=$(readlink -f ${BASH_SOURCE[0]})
+CDIR=${CDIR%/*}
 
 set -e
 trap onExit EXIT
@@ -49,6 +51,9 @@ while [[ $# != 0 ]] ; do
     elif [[ $1 == --dist ]] ; then
         ## --dist DISTRO: distro name (ex: centos5)
         DIST=$2 ; shift
+    elif [[ $1 == --clean ]] ; then
+        rm -rf "$CDIR/build"
+        exit 0
     elif [[ $1 == --from ]] ; then
         ## --from FILENAME: file containing packages to build
         if [[ -r $2 ]] ; then
@@ -82,13 +87,17 @@ else
     HAVE=( $(<dist/$DIST) )
 fi
 
-[[ ! -d build ]] && mkdir build
+[[ ! -d $CDIR/build ]] && mkdir $CDIR/build
 
 HAVE_=" ${HAVE[*]} "
-for need in ${NEED[@]} ; do
-    [[ -z "${HAVE_##* $need *}" ]] && continue
-    [[ -x scripts/build-$need ]] ||
-        die "don't known how to build $need: can't read scripts/build-$need"
-    ( cd build ; BUILDDIR=$need ; source ../scripts/build-$need )
+for PKG in ${NEED[@]} ; do
+    [[ -z "${HAVE_##* $PKG *}" ]] && continue
+    [[ -x scripts/build-$PKG ]] ||
+        die "don't known how to build $PKG: can't read scripts/build-$PKG"
+    BUILDDIR=$CDIR/build/$PKG
+    mkdir -p $BUILDDIR
+    cd $BUILDDIR
+    source $CDIR/scripts/build-$PKG
+    cd $CDIR
 done
 

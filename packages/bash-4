@@ -1,0 +1,20 @@
+#!/bin/bash
+
+SRC_VERSION="4.2"
+SRC_FILENAME="bash-$SRC_VERSION.tgz"
+SRC_FETCH_PATH="http://ftp.gnu.org/gnu/bash/bash-$SRC_VERSION.tar.gz"
+SRC_FETCH_METHOD="http"
+PATCHES=( bash42-{001..045} )
+PATCH_LEVEL=0
+
+function do_compile() {
+    ./configure --prefix="/usr" --sysconfdir="/etc"
+    ${PMAKE}
+    strip bash
+}
+
+function do_install() {
+    cp bash $DESTDIR/$PKG
+}
+
+

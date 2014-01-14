@@ -1,0 +1,16 @@
+#!/bin/bash
+
+SRC_FILENAME="flxutils.tgz"
+SRC_FETCH_PATH="http://git.formilux.org/?p=dist/src/flxutils.git;a=snapshot;h=41dbee8f5da100d652899ad403c0e2ac43b16f04;sf=tgz"
+SRC_FETCH_METHOD="http"
+
+function do_compile() {
+  cd flx
+  ${PMAKE} flx
+  strip flx
+  cd ..
+}
+
+function do_install() {
+    cp flx/flx $DESTDIR/$PKG
+}

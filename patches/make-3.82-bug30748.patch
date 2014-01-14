@@ -1,0 +1,32 @@
+From 3b1432d86aebdc48aaa52efa06fad1ad662b38d7 Mon Sep 17 00:00:00 2001
+From: Paul Smith <psmith@gnu.org>
+Date: Sun, 29 Aug 2010 04:50:26 +0000
+Subject: Set shellflags to a reasonable default if it's not set already.
+
+---
+diff --git a/job.c b/job.c
+index aacfb84..eab91a1 100644
+--- a/job.c
++++ b/job.c
+@@ -2434,6 +2434,9 @@ construct_command_argv_internal (char *line, char **restp, char *shell,
+   if (*line == '\0')
+     return 0;
+ 
++  if (shellflags == 0)
++    shellflags = posix_pedantic ? "-ec" : "-c";
++
+   /* See if it is safe to parse commands internally.  */
+   if (shell == 0)
+     shell = default_shell;
+@@ -2977,7 +2980,8 @@ construct_command_argv_internal (char *line, char **restp, char *shell,
+ #endif /* WINDOWS32 */
+ 
+     if (unixy_shell)
+-      new_argv = construct_command_argv_internal (new_line, 0, 0, 0, 0, flags, 0);
++      new_argv = construct_command_argv_internal (new_line, 0, 0, 0, 0,
++                                                  flags, 0);
+ 
+ #ifdef __EMX__
+     else if (!unixy_shell)
+--
+cgit v0.9.0.2

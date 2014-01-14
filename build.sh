@@ -29,13 +29,35 @@ function onExit() {
     exit $?
 }
 
+
+function do_prepare() {
+    if [[ ! -e ../$SRC_FILENAME ]] ; then
+        echo "## downloading $SRC_FETCH_PATH" >&2
+        if ! curl -L -s -o "../$SRC_FILENAME" "$SRC_FETCH_PATH" ; then
+            die "can't read or download $SRC_FILENAME"
+        fi
+    fi
+
+    echo "## extracting $SRC_FILENAME in $BUILDDIR" >&2
+    tar zxf ../$SRC_FILENAME --strip-components 1
+
+    for patch in ${PATCHES[@]} ; do
+        echo "## patching with $PDIR/$patch" >&2
+        patch -p${PATCH_LEVEL:-1} < $PDIR/$patch
+    done
+}
+
 ALL_NEED=( 
+    make-3.81 make-3.82 bash-4
     depmod depmod flx mksquashfs-2 mksquashfs-3 mksquashfs-4 sudo
-    bash-4 make-3.81 make-3.82
 )
 # NEED=( */build.sh )
 # NEED=( */ )
 # NEED=( ${SUBS[@]%/*} )
+
+CPU=$(grep -cw ^processor /proc/cpuinfo)
+MAKE=${MAKE:-make}
+PMAKE="$MAKE -j$CPU"
 
 CDIR=$(readlink -f ${BASH_SOURCE[0]})
 CDIR=${CDIR%/*}
@@ -93,13 +115,23 @@ fi
 HAVE_=" ${HAVE[*]} "
 for PKG in ${NEED[@]} ; do
     [[ -z "${HAVE_##* $PKG *}" ]] && continue
-    [[ -x scripts/build-$PKG ]] ||
-        die "don't known how to build $PKG: can't read scripts/build-$PKG"
-    echo "## building $PKG ..." >&2
-    BUILDDIR=$CDIR/build/$PKG
-    mkdir -p $BUILDDIR
-    cd $BUILDDIR
-    source $CDIR/scripts/build-$PKG
-    cd $CDIR
+    [[ -x packages/$PKG ]] ||
+        die "don't known how to build $PKG: can't read packages/$PKG"
+    (
+        echo "## building $PKG ..." >&2
+        BUILDDIR=$CDIR/build/$PKG
+        rm -rf $BUILDDIR
+        mkdir -p $BUILDDIR
+        source $CDIR/packages/$PKG
+        cd $BUILDDIR
+        do_prepare
+        do_compile
+        if [[ -d $DESTDIR ]] ; then
+            echo "## installing to $DESTDIR" >&2
+            do_install
+        else
+            echo "re-run with --install to install binaries" >&2
+        fi
+    )
 done
 

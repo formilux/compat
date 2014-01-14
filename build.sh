@@ -33,7 +33,7 @@ function onExit() {
 function do_prepare() {
     if [[ ! -e ../$SRC_FILENAME ]] ; then
         echo "## downloading $SRC_FETCH_PATH" >&2
-        if ! curl -L -s -o "../$SRC_FILENAME" "$SRC_FETCH_PATH" ; then
+        if ! "$FLXTECHNO/scripts/get_cached_file" "$SRC_FETCH_PATH" "../$SRC_FILENAME" "$FLX_SRC_CACHE_DIRS" ; then
             die "can't read or download $SRC_FILENAME"
         fi
     fi

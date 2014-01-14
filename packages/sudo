@@ -13,6 +13,8 @@ function do_compile() {
 
 function do_install() {
     cp sudo $DESTDIR/$PKG
+    sudo chown root:root $DESTDIR/$PKG
+    sudo chmod 4111 $DESTDIR/$PKG
 }
 
 

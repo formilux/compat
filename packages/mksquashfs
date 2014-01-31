@@ -7,7 +7,7 @@ SRC_FETCH_METHOD="http"
 
 function do_compile() {
     cd squashfs-tools
-    ${PMAKE}
+    ${PMAKE} GZIP_SUPPORT=1 XZ_SUPPORT=1
     strip mksquashfs
     cd ..
 }

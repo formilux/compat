@@ -50,7 +50,7 @@ do_prepare() {
 
 ALL_NEED=( 
     make-3.81 make-3.82 bash-4
-    depmod depmod flx mksquashfs-2 mksquashfs-3 mksquashfs-4 sudo
+    depmod depmod flx liblzma-5 mksquashfs-2 mksquashfs-3 mksquashfs-4 sudo
 )
 # NEED=( */build.sh )
 # NEED=( */ )

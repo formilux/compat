@@ -1,4 +1,5 @@
 bash-4
 depmod
 make-3.81
+liblzma-5
 sudo

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# This library is only meant to be used by mksquashfs, so it does not need
+# to be installed nor does it need shared libs.
+
+SRC_VERSION="5.0.5"
+SRC_FILENAME="xz-$SRC_VERSION.tar.gz"
+SRC_FETCH_PATH="http://tukaani.org/xz/xz-$SRC_VERSION.tar.gz"
+SRC_FETCH_METHOD="http"
+PATCHES=( )
+
+do_compile() {
+    ./configure --disable-nls --disable-shared --disable-xz && ${PMAKE}
+}
+
+do_install() {
+    :
+}

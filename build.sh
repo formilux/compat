@@ -31,7 +31,7 @@ onExit() {
 
 
 do_prepare() {
-    if [[ ! -e ../$SRC_FILENAME ]] ; then
+    if [[ ! -s ../$SRC_FILENAME ]] ; then
         echo "## downloading $SRC_FETCH_PATH" >&2
 
         if ! "$CDIR/scripts/get_cached_file" "$SRC_FETCH_PATH" "../$SRC_FILENAME" "$FLX_SRC_CACHE_DIRS" ; then

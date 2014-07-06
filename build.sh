@@ -30,7 +30,7 @@ onExit() {
 }
 
 
-do_prepare() {
+do_download() {
     mkdir -p "$DDIR"
     if [[ ! -s "$DDIR/$SRC_FILENAME" ]] ; then
         echo "## downloading $SRC_FETCH_PATH" >&2
@@ -40,15 +40,26 @@ do_prepare() {
         fi
     fi
 
-    echo "## extracting $SRC_FILENAME in $BUILDDIR" >&2
+    echo -n "## Verifying $SRC_FILENAME ..." >&2
+    case "$SRC_FILENAME" in
+      *.tar.gz|*.tgz)          tar --strip-components 1 -ztf "$DDIR/$SRC_FILENAME" > /dev/null ;;
+      *.tar.bz2|*.tbz2|*.tbz)  tar --strip-components 1 -ztf "$DDIR/$SRC_FILENAME" > /dev/null ;;
+      *)                       tar --strip-components 1  -tf "$DDIR/$SRC_FILENAME" > /dev/null ;;
+    esac || die "source file $DDIR/$SRC_FILENAME seems corrupted."
+    echo " OK.">&2
+}
+
+do_prepare() {
+    echo -n "## Extracting $SRC_FILENAME in $BUILDDIR ..." >&2
     case "$SRC_FILENAME" in
       *.tar.gz|*.tgz)          tar --strip-components 1 -zxf "$DDIR/$SRC_FILENAME" ;;
       *.tar.bz2|*.tbz2|*.tbz)  tar --strip-components 1 -zxf "$DDIR/$SRC_FILENAME" ;;
       *)                       tar --strip-components 1  -xf "$DDIR/$SRC_FILENAME" ;;
     esac || die "source file $DDIR/$SRC_FILENAME seems corrupted."
+    echo " done.">&2
 
     for patch in ${PATCHES[@]} ; do
-        echo "## patching with $PDIR/$PKG/$patch" >&2
+        echo "## Patching with $PDIR/$PKG/$patch" >&2
         patch -p${PATCH_LEVEL:-1} < $PDIR/$PKG/$patch
     done
 }
@@ -84,6 +95,9 @@ while [[ $# != 0 ]] ; do
     elif [[ $1 == --reuse ]] ; then
         ## --reuse      : do not clean before running (useful with --install)
         REUSE=1
+    elif [[ $1 == --download ]] ; then
+        ## --download   : only download sources and exit (do not build)
+        DOWNLOAD=1
     elif [[ $1 == --clean ]] ; then
         ## --clean      : clean the build directory
         rm -rf "$CDIR/build"
@@ -133,23 +147,29 @@ for PKG in ${NEED[@]} ; do
     [[ -x packages/$PKG ]] ||
         die "don't known how to build $PKG: can't read packages/$PKG"
     (
-        echo "## building $PKG ..." >&2
+        echo "## Downloading $PKG ..." >&2
         BUILDDIR=$CDIR/build/$PKG
 
+        source "$CDIR/packages/$PKG"
+
         if [ -z "$REUSE" ]; then
+            do_download
+            if [ -n "$DOWNLOAD" ]; then
+                continue;
+            fi
+
             rm -rf $BUILDDIR
             mkdir -p $BUILDDIR
-            source $CDIR/packages/$PKG
             cd $BUILDDIR
-            do_prepare
-            do_compile
-        else
-            source $CDIR/packages/$PKG
-            cd $BUILDDIR
+            do_prepare || exit $?
+
+            echo "## Building $PKG ..." >&2
+            do_compile || exit $?
         fi
 
+        cd "$BUILDDIR"
         if [[ -d $DESTDIR ]] ; then
-            echo "## installing to $DESTDIR" >&2
+            echo "## Installing $PKG to $DESTDIR" >&2
             do_install
         else
             echo "re-run with --install to install binaries" >&2

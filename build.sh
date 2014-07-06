@@ -40,7 +40,11 @@ do_prepare() {
     fi
 
     echo "## extracting $SRC_FILENAME in $BUILDDIR" >&2
-    tar zxf ../$SRC_FILENAME --strip-components 1
+    case "$SRC_FILENAME" in
+      *.tar.gz|*.tgz)          tar --strip-components 1 -zxf ../$SRC_FILENAME ;;
+      *.tar.bz2|*.tbz2|*.tbz)  tar --strip-components 1 -zxf ../$SRC_FILENAME ;;
+      *)                       tar --strip-components 1  -xf ../$SRC_FILENAME ;;
+    esac || die "source file $SRC_FILENAME seems corrupted."
 
     for patch in ${PATCHES[@]} ; do
         echo "## patching with $PDIR/$PKG/$patch" >&2

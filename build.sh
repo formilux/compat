@@ -75,6 +75,9 @@ while [[ $# != 0 ]] ; do
     elif [[ $1 == --dist ]] ; then
         ## --dist DISTRO: distro name (ex: centos5)
         DIST=$2 ; shift
+    elif [[ $1 == --reuse ]] ; then
+        ## --reuse      : do not clean before running (useful with --install)
+        REUSE=1
     elif [[ $1 == --clean ]] ; then
         rm -rf "$CDIR/build"
         exit 0
@@ -121,12 +124,19 @@ for PKG in ${NEED[@]} ; do
     (
         echo "## building $PKG ..." >&2
         BUILDDIR=$CDIR/build/$PKG
-        rm -rf $BUILDDIR
-        mkdir -p $BUILDDIR
-        source $CDIR/packages/$PKG
-        cd $BUILDDIR
-        do_prepare
-        do_compile
+
+        if [ -z "$REUSE" ]; then
+            rm -rf $BUILDDIR
+            mkdir -p $BUILDDIR
+            source $CDIR/packages/$PKG
+            cd $BUILDDIR
+            do_prepare
+            do_compile
+        else
+            source $CDIR/packages/$PKG
+            cd $BUILDDIR
+        fi
+
         if [[ -d $DESTDIR ]] ; then
             echo "## installing to $DESTDIR" >&2
             do_install

@@ -13,8 +13,8 @@ do_compile() {
 }
 
 do_install() {
-    rm -f $DESTDIR/$PKG
-    cp make $DESTDIR/$PKG
+    rm -f "$DESTDIR/$PKG"
+    cp make "$DESTDIR/$PKG"
 }
 
 

@@ -17,7 +17,7 @@ die() {
 onError() {
     RET=$?
     echo "Error stack:" >&2
-    for i in ${!FUNCNAME[*]} ; do
+    for i in "${!FUNCNAME[*]}" ; do
         printf "  %-15s %s\n" "${BASH_SOURCE[$i]}:${BASH_LINENO[$i]}" \
                               "${FUNCNAME[$i]}(...)"
     done >&2
@@ -58,9 +58,9 @@ do_prepare() {
     esac || die "source file $DDIR/$SRC_FILENAME seems corrupted."
     echo " done.">&2
 
-    for patch in ${PATCHES[@]} ; do
+    for patch in "${PATCHES[@]}" ; do
         echo "## Patching with $PDIR/$PKG/$patch" >&2
-        patch -p${PATCH_LEVEL:-1} < $PDIR/$PKG/$patch
+        patch -p${PATCH_LEVEL:-1} < "$PDIR/$PKG/$patch"
     done
 }
 
@@ -73,11 +73,11 @@ ALL_NEED=(
 # NEED=( ${SUBS[@]%/*} )
 
 CPU=$(grep -cw ^processor /proc/cpuinfo)
-MAKE=${MAKE:-make}
+MAKE="${MAKE:-make}"
 PMAKE="$MAKE -j$CPU"
 
-CDIR=$(readlink -f ${BASH_SOURCE[0]})
-CDIR=${CDIR%/*}
+CDIR=$(readlink -f "${BASH_SOURCE[0]}")
+CDIR="${CDIR%/*}"
 PDIR="$CDIR/patches"
 DDIR="$CDIR/download"
 
@@ -108,47 +108,47 @@ while [[ $# != 0 ]] ; do
         exit 0
     elif [[ $1 == --from ]] ; then
         ## --from FILENAME: file containing packages to build
-        if [[ -r $2 ]] ; then
-            NEED=( $(<$2) ) ; shift
+        if [[ -r "$2" ]] ; then
+            NEED=( $(<"$2") ) ; shift
         else
             die "Can't read needed file $2"
         fi
     elif [[ $1 == --install ]] ; then
         ## --install DESTDIR: install to this directory
-        if [[ -d $2 ]] ; then
-            DESTDIR=$2 ; shift
+        if [[ -d "$2" ]] ; then
+            DESTDIR="$2" ; shift
         else
             die "Missing or invalid destination directory (ex: /opt/flx2/bin)"
         fi
     elif [[ ${1:0:1} == - ]] ; then
         die "Unknown parameter $1"
     else
-        NEED=( ${NEED[@]} $1 )
+        NEED=( "${NEED[@]}" "$1" )
     fi
     shift
 done
 
 if [[ ${#NEED[@]} == 0 ]] ; then
-    NEED=( ${ALL_NEED[@]} )
+    NEED=( "${ALL_NEED[@]}" )
 fi
 
 # look for distrib known packages
-if [[ -z $DIST || ! -e dist/$DIST ]] ; then
+if [[ -z "$DIST" || ! -e "dist/$DIST" ]] ; then
     HAVE=( )
 else
-    HAVE=( $(<dist/$DIST) )
+    HAVE=( $(<"dist/$DIST") )
 fi
 
-[[ ! -d $CDIR/build ]] && mkdir $CDIR/build
+[[ ! -d "$CDIR/build" ]] && mkdir "$CDIR/build"
 
 HAVE_=" ${HAVE[*]} "
-for PKG in ${NEED[@]} ; do
+for PKG in "${NEED[@]}" ; do
     [[ -z "${HAVE_##* $PKG *}" ]] && continue
-    [[ -x packages/$PKG ]] ||
+    [[ -x "packages/$PKG" ]] ||
         die "don't known how to build $PKG: can't read packages/$PKG"
     (
         echo "## Downloading $PKG ..." >&2
-        BUILDDIR=$CDIR/build/$PKG
+        BUILDDIR="$CDIR/build/$PKG"
 
         source "$CDIR/packages/$PKG"
 
@@ -158,9 +158,9 @@ for PKG in ${NEED[@]} ; do
                 continue;
             fi
 
-            rm -rf $BUILDDIR
-            mkdir -p $BUILDDIR
-            cd $BUILDDIR
+            rm -rf "$BUILDDIR"
+            mkdir -p "$BUILDDIR"
+            cd "$BUILDDIR"
             do_prepare || exit $?
 
             echo "## Building $PKG ..." >&2
@@ -168,7 +168,7 @@ for PKG in ${NEED[@]} ; do
         fi
 
         cd "$BUILDDIR"
-        if [[ -d $DESTDIR ]] ; then
+        if [[ -d "$DESTDIR" ]] ; then
             echo "## Installing $PKG to $DESTDIR" >&2
             do_install
         else

@@ -1,4 +1,4 @@
 #!/bin/bash
 
 SRC_VERSION=2.2-r2
-source ${BASH_SOURCE[0]%-*}
+source "${BASH_SOURCE[0]%-*}"

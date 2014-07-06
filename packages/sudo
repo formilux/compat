@@ -12,8 +12,8 @@ do_compile() {
 }
 
 do_install() {
-    rm -f $DESTDIR/$PKG
-    cp sudo $DESTDIR/$PKG
-    sudo chown root:root $DESTDIR/$PKG
-    sudo chmod 4111 $DESTDIR/$PKG
+    rm -f "$DESTDIR/$PKG"
+    cp sudo "$DESTDIR/$PKG"
+    sudo chown root:root "$DESTDIR/$PKG"
+    sudo chmod 4111 "$DESTDIR/$PKG"
 }

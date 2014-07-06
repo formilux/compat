@@ -33,12 +33,9 @@ function onExit() {
 function do_prepare() {
     if [[ ! -e ../$SRC_FILENAME ]] ; then
         echo "## downloading $SRC_FETCH_PATH" >&2
-        if ! [ -x "$FLXTECHNO/scripts/get_cached_file" ]; then
-            die "\$FLXTECHNO/scripts/get_cached_file not found, perhaps you didn't set FLXTECHNO ?"
-        fi
 
-        if ! "$FLXTECHNO/scripts/get_cached_file" "$SRC_FETCH_PATH" "../$SRC_FILENAME" "$FLX_SRC_CACHE_DIRS" ; then
-            die "can't read or download $SRC_FILENAME"
+        if ! "$CDIR/scripts/get_cached_file" "$SRC_FETCH_PATH" "../$SRC_FILENAME" "$FLX_SRC_CACHE_DIRS" ; then
+            die "can't read or download $SRC_FILENAME. You may want to force \$FLX_SRC_CACHE_DIRS to your source cache location."
         fi
     fi
 

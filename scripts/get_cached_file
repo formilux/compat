@@ -1,0 +1,71 @@
+#!/bin/bash
+
+_WGET=${_WGET:-wget}
+
+# get file from location $1, store it as file $2. One or multiple directories
+# may be specified in $3... They will be used as caches and looked up in the
+# same order. All caches will be updated to hold the file from lower priority
+# caches. If a cache directory name is suffixed with ":r", it is only read,
+# but never updated.
+function get_cached_file {
+  local from="$1"; shift
+  local dest="$1"; shift
+  local -a caches=( $* )
+  local cur_cache=0
+  local name dir
+
+  # retrieve the name as the last slash-delimited part which contains a dot.
+  name=$(echo -n "$from" | sed -e 's#.*/\([^/;]*\.[^/;]*\).*#\1#')
+
+  # we only accept the name if it does not end in ".git" and contains at least
+  # one digit. Otherwise we use an md5 of the full URL.
+  if [ -z "${name##*.git}" -o -n "${name##*[0-9]*}" ]; then
+     set -- $(echo -n "$from" | md5sum)
+     name="url-$1"
+  fi
+
+  while [ $cur_cache -lt ${#caches[*]} ]; do
+    dir="${caches[$cur_cache]}"; dir="${dir%:r}"
+    [ -e "$dir/$name" ] && break
+    (( cur_cache++ ))
+  done
+
+  if [ $cur_cache -ge ${#caches[*]} ]; then
+    # Object not found in cache, retrieve it and populate all caches
+    ${_WGET} -c "$from" -O "$dest" || return 1
+
+    # Populate caches. We don't exit on error but we remove potentially
+    # broken objects.
+    cur_cache=0
+    while [ $cur_cache -lt ${#caches[*]} ]; do
+      if [ -n "${caches[$cur_cache]##*:r}" ]; then
+        echo "  Updating cache dir ${caches[$cur_cache]%:r}."
+        cp "$dest" "${caches[$cur_cache]%:r}/$name" || rm -f "${caches[$cur_cache]%:r}"
+      fi
+      (( cur_cache++ ))
+    done
+    return 0
+  fi
+
+  # OK, object was found, let's copy it and populate caches of higher
+  # priority.
+
+  echo "Fetching copy of $from from cache dir $dir."
+  cp "$dir/$name" "$dest" || return 1
+
+  while [ $cur_cache -gt 0 ]; do
+    (( cur_cache-- ))
+    if [ -n "${caches[$cur_cache]##*:r}" ]; then
+      echo "  Updating cache dir ${caches[$cur_cache]%:r}."
+      cp "$dir/$name" "${caches[$cur_cache]%:r}" || rm -f "${caches[$cur_cache]%:r}"
+    fi
+  done
+  return 0
+}
+
+if [ $# != 3 ]; then
+   echo "Usage: ${0##*/} <url> <destfile> <cachedirs>" >&2
+   exit 1
+fi
+
+get_cached_file "$1" "$2" "$3"

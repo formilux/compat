@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-function usage() {
+usage() {
     echo "Usage: ${0##*/} [options] [PKG ...]" >&2
     echo "Options:" >&2
     sed -n -r -e 's/^\s*##([^:]+): /  \1\t/p' < $0 >&2
@@ -9,12 +9,12 @@ function usage() {
     exit 1
 }
 
-function die() {
+die() {
     echo "Fatal: $*" >&2
     exit 2
 }
 
-function onError() {
+onError() {
     RET=$?
     echo "Error stack:" >&2
     for i in ${!FUNCNAME[*]} ; do
@@ -24,13 +24,13 @@ function onError() {
     return $?
 }
 
-function onExit() {
+onExit() {
     RET=$?
     exit $?
 }
 
 
-function do_prepare() {
+do_prepare() {
     if [[ ! -e ../$SRC_FILENAME ]] ; then
         echo "## downloading $SRC_FETCH_PATH" >&2
 
@@ -135,4 +135,3 @@ for PKG in ${NEED[@]} ; do
         fi
     ) || exit $?
 done
-

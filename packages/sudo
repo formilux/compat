@@ -5,16 +5,14 @@ SRC_FILENAME="sudo-$SRC_VERSION.tgz"
 SRC_FETCH_PATH="http://www.sudo.ws/sudo/dist/sudo-$SRC_VERSION.tar.gz"
 SRC_FETCH_METHOD="http"
 
-function do_compile() {
+do_compile() {
     ./configure --prefix="/usr" --sysconfdir="/etc" --with-env-editor
     ${PMAKE}
     strip sudo
 }
 
-function do_install() {
+do_install() {
     cp sudo $DESTDIR/$PKG
     sudo chown root:root $DESTDIR/$PKG
     sudo chmod 4111 $DESTDIR/$PKG
 }
-
-

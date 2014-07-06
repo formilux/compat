@@ -1,19 +1,17 @@
 #!/bin/bash
 
-[[ -n $SRC_VERSION ]] || die "need to be source by parent script"
+[[ -n $SRC_VERSION ]] || die "need to be sourced by parent script"
 SRC_FILENAME="squashfs-$SRC_VERSION.tgz"
 SRC_FETCH_PATH="http://sourceforge.net/projects/squashfs/files/squashfs/squashfs$SRC_VERSION/squashfs$SRC_VERSION.tar.gz/download"
 SRC_FETCH_METHOD="http"
 
-function do_compile() {
+do_compile() {
     cd squashfs-tools
     ${PMAKE} GZIP_SUPPORT=1 XZ_SUPPORT=1
     strip mksquashfs
     cd ..
 }
 
-function do_install() {
+do_install() {
     cp squashfs-tools/mksquashfs $DESTDIR/$PKG
 }
-
-

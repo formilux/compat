@@ -5,13 +5,13 @@ SRC_FETCH_PATH="http://git.formilux.org/?p=dist/src/flxutils.git;a=snapshot;h=41
 SRC_FETCH_METHOD="http"
 PATCHES=( 0001-BUILD-disable-old-header-checking-in-flx.patch  0002-flx-replace-md5-implementation-with-official-one-to-.patch )
 
-function do_compile() {
+do_compile() {
   cd flx
   ${PMAKE} flx
   strip flx
   cd ..
 }
 
-function do_install() {
+do_install() {
     cp flx/flx $DESTDIR/$PKG
 }

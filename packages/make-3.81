@@ -6,13 +6,13 @@ SRC_FETCH_PATH="http://ftp.gnu.org/gnu/make/make-$SRC_VERSION.tar.gz"
 SRC_FETCH_METHOD="http"
 PATCHES=( )
 
-function do_compile() {
+do_compile() {
     ./configure --prefix="/usr" --sysconfdir="/etc"
     ${PMAKE}
     strip make
 }
 
-function do_install() {
+do_install() {
     cp make $DESTDIR/$PKG
 }
 

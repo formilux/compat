@@ -8,3 +8,29 @@ or bogus make-3.82, etc...).
 In order to use it, just run "./build.sh --dist <your-distro>" and pick one
 distro from the dist/ directory. Alternatively you can use --from to force
 using a specific list of packages. Read the script for more information.
+
+By default, the script will only build packages and not install them. You need
+to pass "--install /path/to/destination" to install the resulting executables.
+It is also possible to install after building without rebuilding everything.
+For this, please pass "--reuse" to reuse the previously built executables
+during the installation phase.
+
+The build scripts are compatible with bash back to old versions (at least
+2.05b). They also are also compatible with ksh. However, they are not strictly
+OSIX so they explicitly reference /bin/bash. If your system has bash at a
+different location or uses ksh instead, the only files which need to be changed
+strictly speaking are build.sh and scripts/get_cached_file. The other files are
+only sourced and will not really depend on the shell.
+
+If some of the sources are already available somewhere, simply pass the list of
+directories to look into in the FLX_SRC_CACHE_DIRS variable.
+
+Example :
+
+  $ mkdir -p /opt/flx2/bin
+  $ FLX_SRC_CACHE_DIRS=/cache/src \
+       ./build.sh --dist centos6 --install /opt/flx2/bin
+
+The build directory may be removed using --clean. The downloaded files are stored
+into the download directory, which is not cleaned using --clean. In order to also
+clean it, use --distclean instead.

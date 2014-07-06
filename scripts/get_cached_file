@@ -8,11 +8,11 @@ _WGET=${_WGET:-wget}
 # caches. If a cache directory name is suffixed with ":r", it is only read,
 # but never updated.
 function get_cached_file {
-  local from="$1"; shift
-  local dest="$1"; shift
-  local -a caches=( $* )
-  local cur_cache=0
-  local name dir
+  typeset from="$1"; shift
+  typeset dest="$1"; shift
+  typeset -a caches=( $* )
+  typeset cur_cache=0
+  typeset name dir
 
   # retrieve the name as the last slash-delimited part which contains a dot.
   name=$(echo -n "$from" | sed -e 's#.*/\([^/;]*\.[^/;]*\).*#\1#')

@@ -12,5 +12,6 @@ do_compile() {
 }
 
 do_install() {
+    rm -f $DESTDIR/$PKG
     cp build/depmod $DESTDIR/$PKG
 }

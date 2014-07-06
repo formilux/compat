@@ -13,5 +13,6 @@ do_compile() {
 }
 
 do_install() {
+    rm -f $DESTDIR/$PKG
     cp squashfs-tools/mksquashfs $DESTDIR/$PKG
 }

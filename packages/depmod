@@ -2,7 +2,7 @@
 
 SRC_VERSION="3.15"
 SRC_FILENAME="module-init-tools-$SRC_VERSION.tgz"
-SRC_FETCH_PATH="https://www.kernel.org/pub/linux/utils/kernel/module-init-tools/module-init-tools-$SRC_VERSION.tar.gz"
+SRC_FETCH_PATH="http://ftp.kernel.org/pub/linux/utils/kernel/module-init-tools/module-init-tools-$SRC_VERSION.tar.gz"
 SRC_FETCH_METHOD="http"
 
 do_compile() {

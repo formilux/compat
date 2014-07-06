@@ -31,20 +31,21 @@ onExit() {
 
 
 do_prepare() {
-    if [[ ! -s ../$SRC_FILENAME ]] ; then
+    mkdir -p "$DDIR"
+    if [[ ! -s "$DDIR/$SRC_FILENAME" ]] ; then
         echo "## downloading $SRC_FETCH_PATH" >&2
 
-        if ! "$CDIR/scripts/get_cached_file" "$SRC_FETCH_PATH" "../$SRC_FILENAME" "$FLX_SRC_CACHE_DIRS" ; then
+        if ! "$CDIR/scripts/get_cached_file" "$SRC_FETCH_PATH" "$DDIR/$SRC_FILENAME" "$FLX_SRC_CACHE_DIRS" ; then
             die "can't read or download $SRC_FILENAME. You may want to force \$FLX_SRC_CACHE_DIRS to your source cache location."
         fi
     fi
 
     echo "## extracting $SRC_FILENAME in $BUILDDIR" >&2
     case "$SRC_FILENAME" in
-      *.tar.gz|*.tgz)          tar --strip-components 1 -zxf ../$SRC_FILENAME ;;
-      *.tar.bz2|*.tbz2|*.tbz)  tar --strip-components 1 -zxf ../$SRC_FILENAME ;;
-      *)                       tar --strip-components 1  -xf ../$SRC_FILENAME ;;
-    esac || die "source file $SRC_FILENAME seems corrupted."
+      *.tar.gz|*.tgz)          tar --strip-components 1 -zxf "$DDIR/$SRC_FILENAME" ;;
+      *.tar.bz2|*.tbz2|*.tbz)  tar --strip-components 1 -zxf "$DDIR/$SRC_FILENAME" ;;
+      *)                       tar --strip-components 1  -xf "$DDIR/$SRC_FILENAME" ;;
+    esac || die "source file $DDIR/$SRC_FILENAME seems corrupted."
 
     for patch in ${PATCHES[@]} ; do
         echo "## patching with $PDIR/$PKG/$patch" >&2
@@ -67,6 +68,7 @@ PMAKE="$MAKE -j$CPU"
 CDIR=$(readlink -f ${BASH_SOURCE[0]})
 CDIR=${CDIR%/*}
 PDIR="$CDIR/patches"
+DDIR="$CDIR/download"
 
 set -e
 trap onExit EXIT
@@ -83,7 +85,12 @@ while [[ $# != 0 ]] ; do
         ## --reuse      : do not clean before running (useful with --install)
         REUSE=1
     elif [[ $1 == --clean ]] ; then
+        ## --clean      : clean the build directory
         rm -rf "$CDIR/build"
+        exit 0
+    elif [[ $1 == --distclean ]] ; then
+        ## --distclean   : clean the build and download directories
+        rm -rf "$CDIR/build" "$CDIR/download"
         exit 0
     elif [[ $1 == --from ]] ; then
         ## --from FILENAME: file containing packages to build

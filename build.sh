@@ -33,6 +33,10 @@ function onExit() {
 function do_prepare() {
     if [[ ! -e ../$SRC_FILENAME ]] ; then
         echo "## downloading $SRC_FETCH_PATH" >&2
+        if ! [ -x "$FLXTECHNO/scripts/get_cached_file" ]; then
+            die "\$FLXTECHNO/scripts/get_cached_file not found, perhaps you didn't set FLXTECHNO ?"
+        fi
+
         if ! "$FLXTECHNO/scripts/get_cached_file" "$SRC_FETCH_PATH" "../$SRC_FILENAME" "$FLX_SRC_CACHE_DIRS" ; then
             die "can't read or download $SRC_FILENAME"
         fi
@@ -132,6 +136,6 @@ for PKG in ${NEED[@]} ; do
         else
             echo "re-run with --install to install binaries" >&2
         fi
-    )
+    ) || exit $?
 done
 

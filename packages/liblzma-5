@@ -5,7 +5,6 @@
 
 SRC_VERSION="5.0.5"
 SRC_FETCH_PATH="http://tukaani.org/xz/xz-$SRC_VERSION.tar.gz"
-SRC_FETCH_METHOD="http"
 PATCHES=( )
 
 do_compile() {

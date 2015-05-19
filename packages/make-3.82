@@ -2,7 +2,6 @@
 
 SRC_VERSION="3.82"
 SRC_FETCH_PATH="http://ftp.gnu.org/gnu/make/make-$SRC_VERSION.tar.gz"
-SRC_FETCH_METHOD="http"
 PATCHES=(
     make-3.82-bug30723.patch
     make-3.82-bug30748.patch

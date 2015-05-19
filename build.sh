@@ -30,61 +30,66 @@ onExit() {
 }
 
 
-# download SRC_FETCH_PATH which can have two syntaxes :
+# download all files specified in SRC_FETCH_PATH, each of which can have two
+# syntaxes :
 #  - <path>|<name> : fetch <path> and store to <name>
 #  - <path>        : the part after the trailing '/' is the name, and whatever
 #                    follows an optional ';' and '?' is trimmed.
 do_download() {
-    local name path
+    local name path origin
 
-    if [ -z "${SRC_FETCH_PATH##*|*}" ]; then
-        name="${SRC_FETCH_PATH##*|}"
-        path="${SRC_FETCH_PATH%|*}"
-    else
-        path="${SRC_FETCH_PATH}"
-        name="${SRC_FETCH_PATH##*/}"
-        name="${name%%[;?]*}"
-    fi
-
-    mkdir -p "$DDIR"
-    if [[ ! -s "$DDIR/$name" ]] ; then
-        echo "## downloading $path" >&2
-
-        if ! "$CDIR/scripts/get_cached_file" "$path" "$DDIR/$name" "$FLX_SRC_CACHE_DIRS" ; then
-            die "can't read or download $name. You may want to force \$FLX_SRC_CACHE_DIRS to your source cache location."
+    for origin in "${SRC_FETCH_PATH[@]}"; do
+        if [ -z "${origin##*|*}" ]; then
+            name="${origin##*|}"
+            path="${origin%|*}"
+        else
+            path="${origin}"
+            name="${origin##*/}"
+            name="${name%%[;?]*}"
         fi
-    fi
 
-    echo -n "## Verifying $name ..." >&2
-    case "$name" in
-      *.tar.gz|*.tgz)          tar --strip-components 1 -ztf "$DDIR/$name" > /dev/null ;;
-      *.tar.bz2|*.tbz2|*.tbz)  tar --strip-components 1 -ztf "$DDIR/$name" > /dev/null ;;
-      *)                       tar --strip-components 1  -tf "$DDIR/$name" > /dev/null ;;
-    esac || die "source file $DDIR/$name seems corrupted."
+        mkdir -p "$DDIR"
+        if [[ ! -s "$DDIR/$name" ]] ; then
+            echo "## downloading $path" >&2
+
+            if ! "$CDIR/scripts/get_cached_file" "$path" "$DDIR/$name" "$FLX_SRC_CACHE_DIRS" ; then
+                die "can't read or download $name. You may want to force \$FLX_SRC_CACHE_DIRS to your source cache location."
+            fi
+        fi
+
+        echo -n "## Verifying $name ..." >&2
+        case "$name" in
+          *.tar.gz|*.tgz)          tar --strip-components 1 -ztf "$DDIR/$name" > /dev/null ;;
+          *.tar.bz2|*.tbz2|*.tbz)  tar --strip-components 1 -ztf "$DDIR/$name" > /dev/null ;;
+          *)                       tar --strip-components 1  -tf "$DDIR/$name" > /dev/null ;;
+        esac || die "source file $DDIR/$name seems corrupted."
+    done
     echo " OK.">&2
 }
 
-# extract the file from SRC_FETCH_PATH which can have two syntaxes :
+# extract all the files from SRC_FETCH_PATH which can have two syntaxes :
 #  - <path>|<name> : <name> is the file name in the local cache
 #  - <path>        : the part after the trailing '/' is the name, and whatever
 #                    follows an optional ';' and '?' is trimmed.
 do_prepare() {
-    local name
+    local name origin
 
-    if [ -z "${SRC_FETCH_PATH##*|*}" ]; then
-        name="${SRC_FETCH_PATH##*|}"
-    else
-        name="${SRC_FETCH_PATH##*/}"
-        name="${name%%[;?]*}"
-    fi
+    for origin in "${SRC_FETCH_PATH[@]}"; do
+        if [ -z "${origin##*|*}" ]; then
+            name="${origin##*|}"
+        else
+            name="${origin##*/}"
+            name="${name%%[;?]*}"
+        fi
 
-    echo -n "## Extracting $name in $BUILDDIR ..." >&2
-    case "$name" in
-      *.tar.gz|*.tgz)          tar --strip-components 1 -zxf "$DDIR/$name" ;;
-      *.tar.bz2|*.tbz2|*.tbz)  tar --strip-components 1 -zxf "$DDIR/$name" ;;
-      *)                       tar --strip-components 1  -xf "$DDIR/$name" ;;
-    esac || die "source file $DDIR/$name seems corrupted."
-    echo " done.">&2
+        echo -n "## Extracting $name in $BUILDDIR ..." >&2
+        case "$name" in
+          *.tar.gz|*.tgz)          tar --strip-components 1 -zxf "$DDIR/$name" ;;
+          *.tar.bz2|*.tbz2|*.tbz)  tar --strip-components 1 -zxf "$DDIR/$name" ;;
+          *)                       tar --strip-components 1  -xf "$DDIR/$name" ;;
+        esac || die "source file $DDIR/$name seems corrupted."
+        echo " done.">&2
+    done
 
     for patch in "${PATCHES[@]}" ; do
         echo "## Patching with $PDIR/$PKG/$patch" >&2

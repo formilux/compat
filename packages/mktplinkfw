@@ -1,0 +1,17 @@
+#!/bin/bash
+
+SRC_VERSION="45644"
+SRC_FETCH_PATH=(
+  "https://dev.openwrt.org/export/$SRC_VERSION/trunk/tools/firmware-utils/src/mktplinkfw.c"
+  "https://dev.openwrt.org/export/$SRC_VERSION/trunk/tools/firmware-utils/src/md5.c"
+  "https://dev.openwrt.org/export/$SRC_VERSION/trunk/tools/firmware-utils/src/md5.h"
+)
+
+do_compile() {
+    ${CC:-gcc} -O3 -s -o mktplinkfw mktplinkfw.c md5.c
+}
+
+do_install() {
+    rm -f "$DESTDIR/$PKG"
+    cp mktplinkfw "$DESTDIR/$PKG"
+}

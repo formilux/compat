@@ -1,7 +1,6 @@
 #!/bin/bash
 
-SRC_FILENAME="flxutils.tgz"
-SRC_FETCH_PATH="http://git.formilux.org/?p=dist/src/flxutils.git;a=snapshot;h=41dbee8f5da100d652899ad403c0e2ac43b16f04;sf=tgz"
+SRC_FETCH_PATH="http://git.formilux.org/?p=dist/src/flxutils.git;a=snapshot;h=41dbee8f5da100d652899ad403c0e2ac43b16f04;sf=tgz|flxutils.tgz"
 SRC_FETCH_METHOD="http"
 PATCHES=( 0001-BUILD-disable-old-header-checking-in-flx.patch  0002-flx-replace-md5-implementation-with-official-one-to-.patch )
 

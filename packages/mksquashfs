@@ -1,8 +1,7 @@
 #!/bin/bash
 
 [[ -n $SRC_VERSION ]] || die "need to be sourced by parent script"
-SRC_FILENAME="squashfs-$SRC_VERSION.tgz"
-SRC_FETCH_PATH="http://sourceforge.net/projects/squashfs/files/squashfs/squashfs$SRC_VERSION/squashfs$SRC_VERSION.tar.gz/download"
+SRC_FETCH_PATH="http://sourceforge.net/projects/squashfs/files/squashfs/squashfs$SRC_VERSION/squashfs$SRC_VERSION.tar.gz/download|squashfs-$SRC_VERSION.tar.gz"
 SRC_FETCH_METHOD="http"
 
 do_compile() {

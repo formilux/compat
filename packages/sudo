@@ -1,7 +1,6 @@
 #!/bin/bash
 
 SRC_VERSION="1.7.10p7"
-SRC_FILENAME="sudo-$SRC_VERSION.tgz"
 SRC_FETCH_PATH="http://www.sudo.ws/sudo/dist/sudo-$SRC_VERSION.tar.gz"
 SRC_FETCH_METHOD="http"
 

@@ -4,7 +4,6 @@
 # to be installed nor does it need shared libs.
 
 SRC_VERSION="5.0.5"
-SRC_FILENAME="xz-$SRC_VERSION.tar.gz"
 SRC_FETCH_PATH="http://tukaani.org/xz/xz-$SRC_VERSION.tar.gz"
 SRC_FETCH_METHOD="http"
 PATCHES=( )

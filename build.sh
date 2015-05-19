@@ -61,6 +61,7 @@ do_download() {
         case "$name" in
           *.tar.gz|*.tgz)          tar --strip-components 1 -ztf "$DDIR/$name" > /dev/null ;;
           *.tar.bz2|*.tbz2|*.tbz)  tar --strip-components 1 -ztf "$DDIR/$name" > /dev/null ;;
+          *.c|*.h|*.S|*.sh|*.diff|*.patch) ;;
           *)                       tar --strip-components 1  -tf "$DDIR/$name" > /dev/null ;;
         esac || die "source file $DDIR/$name seems corrupted."
     done
@@ -86,6 +87,7 @@ do_prepare() {
         case "$name" in
           *.tar.gz|*.tgz)          tar --strip-components 1 -zxf "$DDIR/$name" ;;
           *.tar.bz2|*.tbz2|*.tbz)  tar --strip-components 1 -zxf "$DDIR/$name" ;;
+          *.c|*.h|*.S|*.sh|*.diff|*.patch) cp "$DDIR/$name" . ;;
           *)                       tar --strip-components 1  -xf "$DDIR/$name" ;;
         esac || die "source file $DDIR/$name seems corrupted."
         echo " done.">&2

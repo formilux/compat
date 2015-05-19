@@ -126,6 +126,9 @@ while [[ $# != 0 ]] ; do
     elif [[ $1 == --download ]] ; then
         ## --download   : only download sources and exit (do not build)
         DOWNLOAD=1
+    elif [[ $1 == --extract ]] ; then
+        ## --extract   : only download and sources and exit (do not build)
+        EXTRACT=1
     elif [[ $1 == --clean ]] ; then
         ## --clean      : clean the build directory
         rm -rf "$CDIR/build"
@@ -190,6 +193,10 @@ for PKG in "${NEED[@]}" ; do
             mkdir -p "$BUILDDIR"
             cd "$BUILDDIR"
             do_prepare || exit $?
+
+            if [ -n "$EXTRACT" ]; then
+                continue;
+            fi
 
             echo "## Building $PKG ..." >&2
             do_compile || exit $?

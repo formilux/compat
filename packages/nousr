@@ -1,0 +1,14 @@
+#!/bin/bash
+
+SRC_FETCH_PATH="http://git.formilux.org/?p=people/willy/nousr.git;a=snapshot;h=810fada43beda671050841a629ff3ff0a6787d27;sf=tgz|nousr.tgz"
+PATCHES=( )
+
+do_compile() {
+  ${PMAKE}
+  strip nousr.so
+}
+
+do_install() {
+    rm -f "$DESTDIR/$PKG"
+    cp nousr.so "$DESTDIR/$PKG"
+}

@@ -53,7 +53,7 @@ do_download() {
             echo "## downloading $path" >&2
 
             if ! "$CDIR/scripts/get_cached_file" "$path" "$DDIR/$name" "$FLX_SRC_CACHE_DIRS" ; then
-                die "can't read or download $name. You may want to force \$FLX_SRC_CACHE_DIRS to your source cache location."
+                die "can't read or download $name. You may want to force \$FLX_SRC_CACHE_DIRS to your source cache location, or set _WGET to \"${_WGET:-wget} --no-check-certificate\" in case of a cert validation error."
             fi
         fi
 

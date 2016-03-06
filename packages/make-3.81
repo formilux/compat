@@ -6,7 +6,7 @@ PATCHES=( )
 
 do_compile() {
     ./configure --prefix="/usr" --sysconfdir="/etc"
-    ${PMAKE}
+    ${PMAKE} DIST_SUBDIRS= SUBDIRS=
     strip make
 }
 

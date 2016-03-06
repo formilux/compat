@@ -1,4 +1,8 @@
 #!/bin/bash
 
+PATCHES=(
+    static-add_dir_entry.diff
+)
+
 SRC_VERSION=2.2-r2
 source "${BASH_SOURCE[0]%-*}"

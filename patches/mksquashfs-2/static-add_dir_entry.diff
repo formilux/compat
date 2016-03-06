@@ -1,0 +1,14 @@
+gcc 5 manages not to find this function at all a few lines after its
+declaration, declaring it static fixes the issue.
+
+--- ./squashfs-tools/mksquashfs.c.orig	2016-03-06 17:31:10.385230511 +0100
++++ ./squashfs-tools/mksquashfs.c	2016-03-06 17:31:16.505255366 +0100
+@@ -1256,7 +1256,7 @@
+ };
+ 
+ 
+-void inline add_dir_entry(char *name, char *pathname, void *data, struct directory *dir)
++void static inline add_dir_entry(char *name, char *pathname, void *data, struct directory *dir)
+ {
+ 		if((dir->count % DIR_ENTRIES) == 0)
+ 			if((dir->list = realloc(dir->list, (dir->count + DIR_ENTRIES) * sizeof(struct dir_ent *))) == NULL)

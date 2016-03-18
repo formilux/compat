@@ -10,8 +10,12 @@ do_compile() {
 }
 
 do_install() {
-    rm -f "$DESTDIR/$PKG"
-    cp sudo "$DESTDIR/$PKG"
-    sudo chown root:root "$DESTDIR/$PKG"
-    sudo chmod 4111 "$DESTDIR/$PKG"
+    # remove . from the path otherwise the wrong sudo may be found
+    export PATH=${PATH//::/:}
+    export PATH=${PATH//:.:/:}
+    rm -f "$DESTDIR/$PKG" "$DESTDIR/.$PKG"
+    cp sudo "$DESTDIR/.$PKG"
+    ${_SUDO-sudo} chown root:root "$DESTDIR/.$PKG"
+    ${_SUDO-sudo} chmod 4111 "$DESTDIR/.$PKG"
+    mv "$DESTDIR/.$PKG" "$DESTDIR/$PKG"
 }

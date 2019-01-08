@@ -4,7 +4,7 @@ SRC_VERSION="1.7.10p9"
 SRC_FETCH_PATH="ftp://ftp.sudo.ws/pub/sudo/OLD/sudo-$SRC_VERSION.tar.gz"
 
 do_compile() {
-    ./configure --prefix="/usr" --sysconfdir="/etc" --with-env-editor
+    ./configure --prefix="/usr" --sysconfdir="${FLXTECHNO}/etc" --with-env-editor
     ${PMAKE}
     strip sudo
 }

@@ -1,4 +1,8 @@
 #!/bin/bash
 
+PATCHES=(
+    0001-package-flx-include-sys-sysmacros.h-explicitely.patch
+)
+
 SRC_VERSION=4.2
 source "${BASH_SOURCE[0]%-*}"

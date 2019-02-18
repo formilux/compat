@@ -1,38 +1,12 @@
-From ce4911cb3543d700ef5d6c736b7b02b64a1e5efc Mon Sep 17 00:00:00 2001
-From: cyberic99 <cyberic99@users.noreply.github.com>
-Date: Tue, 8 Jan 2019 11:04:55 +0100
-Subject: [PATCH] package: mksquashfs: include <sys/sysmacros.h> explicitely. This is 
- required since glibc 2.28
-
----
- mksquashfs.c | 1 +
- unsquashfs.c | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
-index 58168f3..c44fe46 100644
---- a/squashfs-tools/mksquashfs.c
-+++ b/squashfs-tools/mksquashfs.c
-@@ -33,6 +33,7 @@
- #include <stddef.h>
- #include <sys/time.h>
- #include <sys/types.h>
-+#include <sys/sysmacros.h>
- #include <sys/stat.h>
- #include <fcntl.h>
- #include <errno.h>
 diff --git a/squashfs-tools/unsquashfs.c b/squashfs-tools/unsquashfs.c
-index 529dfac..e366c3d 100644
+index 0437393..1f924c3 100644
 --- a/squashfs-tools/unsquashfs.c
 +++ b/squashfs-tools/unsquashfs.c
-@@ -31,6 +31,7 @@
+@@ -32,6 +32,7 @@
+ #include "stdarg.h"
  
  #include <sys/sysinfo.h>
- #include <sys/types.h>
 +#include <sys/sysmacros.h>
- 
- struct cache *fragment_cache, *data_cache;
- struct queue *to_reader, *to_deflate, *to_writer, *from_writer;
--- 
-2.20.1
-
+ #include <sys/types.h>
+ #include <sys/time.h>
+ #include <sys/resource.h>

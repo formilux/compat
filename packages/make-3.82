@@ -6,6 +6,7 @@ PATCHES=(
     make-3.82-bug30723.patch
     make-3.82-bug30748.patch
     make-3.82-bug31743.patch
+    make-3.82-bug-glob.patch
     make-3.82-bug-gcc10.patch
 )
 

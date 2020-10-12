@@ -1,7 +1,10 @@
 #!/bin/bash
 
 SRC_FETCH_PATH="http://git.formilux.org/?p=dist/src/flxutils.git;a=snapshot;h=084a32afc403fdf5f260f888fb7d0ce6af23b30d;sf=tgz|flxutils.tgz"
-PATCHES=( 0001-package-flx-include-sys-sysmacros.h-explicitely.patch )
+PATCHES=(
+    0001-package-flx-include-sys-sysmacros.h-explicitely.patch
+    0002-package-flx-fix-compilation-with-gcc10.patch
+)
 
 do_compile() {
   cd flx

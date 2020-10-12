@@ -1,0 +1,11 @@
+--- a/flx/arg.c.orig	2020-10-12 20:44:03.335519522 +0200
++++ a/flx/arg.c	2020-10-12 20:44:11.115540630 +0200
+@@ -11,7 +11,7 @@
+ #define TSHORT   2
+ #define TLONG    4
+ 
+-char    *Progname ;
++extern char    *Progname ;
+ 
+ 
+ /* show usage for program with ParamOptions global pointer 

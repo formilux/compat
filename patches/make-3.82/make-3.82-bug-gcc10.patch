@@ -1,0 +1,13 @@
+diff -ru make-3.82-ori/make.h make-3.82/make.h
+--- make-3.82-ori/make.h	2010-07-20 15:12:06.000000000 +0200
++++ make-3.82/make.h	2020-10-12 20:32:15.893054238 +0200
+@@ -344,7 +344,7 @@
+ #endif
+ #ifdef SET_STACK_SIZE
+ # include <sys/resource.h>
+-struct rlimit stack_limit;
++extern struct rlimit stack_limit;
+ #endif
+ 
+ struct floc
+

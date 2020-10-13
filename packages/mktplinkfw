@@ -1,10 +1,10 @@
 #!/bin/bash
 
-SRC_VERSION="45644"
+SRC_VERSION="lede-17.01"
 SRC_FETCH_PATH=(
-  "https://dev.openwrt.org/export/$SRC_VERSION/trunk/tools/firmware-utils/src/mktplinkfw.c"
-  "https://dev.openwrt.org/export/$SRC_VERSION/trunk/tools/firmware-utils/src/md5.c"
-  "https://dev.openwrt.org/export/$SRC_VERSION/trunk/tools/firmware-utils/src/md5.h"
+  "https://raw.githubusercontent.com/openwrt/openwrt/${SRC_VERSION}/tools/firmware-utils/src/mktplinkfw.c"
+  "https://raw.githubusercontent.com/openwrt/openwrt/${SRC_VERSION}/tools/firmware-utils/src/md5.c"
+  "https://raw.githubusercontent.com/openwrt/openwrt/${SRC_VERSION}/tools/firmware-utils/src/md5.h"
 )
 
 do_compile() {

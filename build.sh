@@ -173,7 +173,7 @@ fi
 
 # look for distrib known packages
 if [[ -z "$DIST" || ! -e "dist/$DIST" ]] ; then
-    HAVE=( )
+    HAVE=( $(<"dist/default") )
 else
     HAVE=( $(<"dist/$DIST") )
 fi
@@ -181,6 +181,13 @@ fi
 [[ ! -d "$CDIR/build" ]] && mkdir "$CDIR/build"
 
 HAVE_=" ${HAVE[*]} "
+echo -n "These packages will be built: "
+for PKG in "${NEED[@]}" ; do
+    [[ -z "${HAVE_##* $PKG *}" ]] && continue
+    echo -n "${PKG} "
+done
+echo
+
 for PKG in "${NEED[@]}" ; do
     [[ -z "${HAVE_##* $PKG *}" ]] && continue
     [[ -x "packages/$PKG" ]] ||

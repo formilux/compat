@@ -1,0 +1,9 @@
+depmod
+liblzma-5
+make-3.81
+make-3.82
+make-4.0
+mksquashfs
+mksquashfs-2
+mksquashfs-3
+mksquashfs-4

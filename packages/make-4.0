@@ -3,6 +3,7 @@
 SRC_VERSION="4.0"
 SRC_FETCH_PATH="http://ftp.gnu.org/gnu/make/make-$SRC_VERSION.tar.gz"
 PATCHES=(
+    make-4.0-bug-glob.patch
 )
 
 do_compile() {

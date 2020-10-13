@@ -1,0 +1,21 @@
+diff -u a/squashfs-tools-orig/mksquashfs.c b/squashfs-tools/mksquashfs.c
+--- a/squashfs-tools-orig/mksquashfs.c	2020-10-13 10:06:48.393930138 +0200
++++ b/squashfs-tools/mksquashfs.c	2020-10-13 10:11:29.313406648 +0200
+@@ -29,6 +29,7 @@
+ #include <stdio.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <sys/sysmacros.h>
+ #include <fcntl.h>
+ #include <errno.h>
+ #include <dirent.h>
+@@ -68,7 +69,8 @@
+ /* filesystem flags for building */
+ int duplicate_checking = 1, noF = 0, no_fragments = 0, always_use_fragments = 0;
+ int noI = 0, noD = 0, check_data = 0;
+-int swap, silent = TRUE;
++extern int swap;
++int silent = TRUE;
+ long long global_uid = -1, global_gid = -1;
+ int filesystem_minor_version = SQUASHFS_MINOR;
+ 

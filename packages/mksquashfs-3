@@ -2,3 +2,9 @@
 
 SRC_VERSION=3.4
 source "${BASH_SOURCE[0]%-*}"
+
+PATCHES=(
+    0001-package-flx-include-sys-sysmacros.h-explicitely.patch
+    0001-package-flx-include-sys-sysmacros.h-explicitely-2.patch
+    0001-compat.patch
+)

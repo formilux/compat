@@ -1,0 +1,12 @@
+diff --git a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
+index 3d99a83..0780f96 100644
+--- a/squashfs-tools/mksquashfs.c
++++ b/squashfs-tools/mksquashfs.c
+@@ -43,6 +43,7 @@
+ #include <signal.h>
+ #include <setjmp.h>
+ #include <sys/types.h>
++#include <sys/sysmacros.h>
+ #include <sys/mman.h>
+ #include <pthread.h>
+ #include <regex.h>

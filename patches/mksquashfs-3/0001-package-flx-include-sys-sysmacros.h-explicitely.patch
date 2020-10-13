@@ -1,0 +1,12 @@
+diff --git a/squashfs-tools/unsquashfs.c b/squashfs-tools/unsquashfs.c
+index 0437393..1f924c3 100644
+--- a/squashfs-tools/unsquashfs.c
++++ b/squashfs-tools/unsquashfs.c
+@@ -32,6 +32,7 @@
+ #include "stdarg.h"
+ 
+ #include <sys/sysinfo.h>
++#include <sys/sysmacros.h>
+ #include <sys/types.h>
+ #include <sys/time.h>
+ #include <sys/resource.h>

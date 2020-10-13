@@ -167,15 +167,20 @@ while [[ $# != 0 ]] ; do
     shift
 done
 
-if [[ ${#NEED[@]} == 0 ]] ; then
-    NEED=( "${ALL_NEED[@]}" )
-fi
-
 # look for distrib known packages
+# if no --distrib is specified, use 'default' distrib
 if [[ -z "$DIST" || ! -e "dist/$DIST" ]] ; then
     HAVE=( $(<"dist/default") )
 else
     HAVE=( $(<"dist/$DIST") )
+fi
+
+if [[ ${#NEED[@]} == 0 ]] ; then
+    NEED=( "${ALL_NEED[@]}" )
+else
+    # if we used --from, consider we 'have' no package since we explicitely asked
+    # to build specific packages
+    HAVE=( )
 fi
 
 [[ ! -d "$CDIR/build" ]] && mkdir "$CDIR/build"

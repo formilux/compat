@@ -8,11 +8,13 @@ or bogus make-3.82, etc...).
 In order to use it, just run "./build.sh --dist <your-distro>" and pick one
 distro from the dist/ directory. Alternatively you can use --from to force
 using a specific list of packages. Read the script for more information.
+For now, nousr does not build on alpine linux. nousr is not a hard requirement,
+so you can remove it from the list if you cannot build it.
 
 Example:
 
   $ ./build.sh --install /opt/flx2/bin --from \
-        <(echo -n sudo flx nousr mksquashfs-4 depmod)
+        <(echo -n flx sudo mksquashfs-4 make-4.0 depmod nousr)
 
 By default, the script will only build packages and not install them. You need
 to pass "--install /path/to/destination" to install the resulting executables.

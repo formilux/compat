@@ -41,3 +41,13 @@ Example :
 The build directory may be removed using --clean. The downloaded files are stored
 into the download directory, which is not cleaned using --clean. In order to also
 clean it, use --distclean instead.
+
+
+About 'sudo' package:
+
+You will have to copy your host sudoers file to /opt/flx2/etc/sudoers (or to
+another directory, dpeending on where you installed the compat tools)
+
+Be sure to add 'Defaults !env_reset' at then end of the file.
+
+Otherwise, env variables, such as $PATH, will be reset when using sudo. 

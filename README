@@ -5,6 +5,9 @@ formilux (eg: flx), while others are provided as alternative to incompatible
 versions shipped with certain distros (eg: sudo which clears the environment,
 or bogus make-3.82, etc...).
 
+Dependencies:
+you will need xz-devel to build mksquashfs
+
 In order to use it, just run "./build.sh --dist <your-distro>" and pick one
 distro from the dist/ directory. Alternatively you can use --from to force
 using a specific list of packages. Read the script for more information.
